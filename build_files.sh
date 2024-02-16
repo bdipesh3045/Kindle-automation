@@ -1,4 +1,5 @@
 
+pip install --upgrade pip
 pip install -U pip setuptools 
 git clone https://github.com/rsgalloway/instapaper.git
 cd instapaper
