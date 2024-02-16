@@ -26,13 +26,14 @@ class LinkSave(Base):
 Base.metadata.create_all(engine)
 
 
-# Load variables from .env file
-load_dotenv
+# Load variables from .env f
+# ile
+load_dotenv()
 
 # Now you can access the variables as normal Python variables
 CONSUMER_KEY = os.getenv("CONSUMER_KEY")
 CONSUMER_SECRET = os.getenv("CONSUMER_SECRET")
-USERNAME = os.getenv("USERNAME")
+USERNAME = os.getenv("INAME")
 PASSWORD = os.getenv("PASSWORD")
 
 
