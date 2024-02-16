@@ -28,8 +28,9 @@ Utilize the Instapaper API to automate the process:
 A fun and challenging project that streamlines the process of reading web content on Kindle. Explore various technologies while solving a real-world problem!
 
 ## Demo
+![Project Output](https://github.com/bdipesh3045/Kindle-automation/assets/111185281/2cb3ed10-0280-49c4-9c2b-1d36243cca6d)
 
-Insert gif or link to demo
+
 
 ## Documentation
 I have used instrapper Libray into it . I have linked its Documentation below:
