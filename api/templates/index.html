@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add URLs to Folder</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    form {
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #666;
+    }
+    input[type="text"],
+    input[type="url"],
+    input[type="password"] {
+        width: calc(100% - 12px);
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Add URLs to Folder</h2>
+
+    <form id="urlForm" method="post">
+        <div>
+            <label for="secretKey">Secret Key:</label>
+            <input type="password" id="secretKey" name="secretKey" required>
+            <button type="button" id="showHideBtn" onclick="togglePasswordVisibility()">Show/Hide</button>
+        </div>
+        <div>
+            <label for="folderName">Folder Name:</label>
+            <input type="text" id="folderName" name="folderName" required>
+        </div>
+        <div id="bookInputs" class="book-inputs">
+            <label for="bookName1">Book Name 1:</label>
+            <input type="text" id="bookName1" name="bookNames[]" required>
+            <label for="url1">URL 1:</label>
+            <input type="url" id="url1" name="urls[]" required>
+        </div>
+        <button type="button" id="addUrl">Add URL</button>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    // Function to create a counter that initially returns 1 and increments by 1 each time it's called
+    function counter() {
+        let count = 1; // Initialize count variable
+
+        // Inner function to increment and return count
+        function increment() {
+            count++;
+            return count;
+        }
+
+        // Return the inner function
+        return increment;
+    }
+
+    // Create an instance of the counter function
+    const urlIndexCounter = counter();
+
+    // Function to add new Book Name and URL input fields
+    function addUrlInput() {
+        var bookInputsDiv = document.getElementById('bookInputs');
+        var numInputs = urlIndexCounter(); // Get the next index
+        
+        var newBookInputId = 'bookName' + numInputs;
+        var newBookLabel = document.createElement('label');
+        newBookLabel.setAttribute('for', newBookInputId);
+        newBookLabel.textContent = 'Book Name ' + numInputs + ':';
+        var newBookInput = document.createElement('input');
+        newBookInput.setAttribute('type', 'text');
+        newBookInput.setAttribute('id', newBookInputId);
+        newBookInput.setAttribute('name', 'bookNames[]');
+        newBookInput.setAttribute('required', true);
+        
+        var newUrlInputId = 'url' + numInputs;
+        var newUrlLabel = document.createElement('label');
+        newUrlLabel.setAttribute('for', newUrlInputId);
+        newUrlLabel.textContent = 'URL ' + numInputs + ':';
+        var newUrlInput = document.createElement('input');
+        newUrlInput.setAttribute('type', 'url');
+        newUrlInput.setAttribute('id', newUrlInputId);
+        newUrlInput.setAttribute('name', 'urls[]');
+        newUrlInput.setAttribute('required', true);
+        
+        bookInputsDiv.appendChild(document.createElement('br'));
+        bookInputsDiv.appendChild(newBookLabel);
+        bookInputsDiv.appendChild(newBookInput);
+        bookInputsDiv.appendChild(document.createElement('br'));
+        bookInputsDiv.appendChild(newUrlLabel);
+        bookInputsDiv.appendChild(newUrlInput);
+    }
+
+    // Add event listener to the "Add URL" button
+    document.getElementById('addUrl').addEventListener('click', addUrlInput);
+
+    // Function to toggle password visibility
+    function togglePasswordVisibility() {
+        var x = document.getElementById("secretKey");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+</script>
+
+</body>
+</html>
