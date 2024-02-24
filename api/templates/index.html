@@ -41,6 +41,13 @@
         border-radius: 4px;
         margin-bottom: 10px;
     }
+    select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
     button {
         padding: 10px 20px;
         background-color: #4caf50;
@@ -51,6 +58,14 @@
     }
     button:hover {
         background-color: #45a049;
+    }
+    .folder-selection {
+        display: flex;
+        justify-content: space-between;
+    }
+    .folder-selection select,
+    .folder-selection input[type="text"] {
+        width: 48%;
     }
 </style>
 </head>
@@ -65,9 +80,15 @@
             <input type="password" id="secretKey" name="secretKey" required>
             <button type="button" id="showHideBtn" onclick="togglePasswordVisibility()">Show/Hide</button>
         </div>
-        <div>
-            <label for="folderName">Folder Name:</label>
-            <input type="text" id="folderName" name="folderName" required>
+        <div class="folder-selection">
+            <label for="folderSelection">Select or Enter Folder:</label>
+            <select id="folderSelection" name="folderSelection">
+                <option value="">-- Select Folder --</option>
+                {% for folder in folders %}
+                <option value="{{ folder.folder_id }}">{{ folder.folder_name }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" id="folderName" name="folderName" placeholder="Or enter folder name">
         </div>
         <div id="bookInputs" class="book-inputs">
             <label for="bookName1">Book Name 1:</label>
@@ -82,6 +103,25 @@
 </div>
 
 <script>
+      document.getElementById('urlForm').addEventListener('submit', function(event) {
+        var folderSelection = document.getElementById('folderSelection');
+        var folderNameInput = document.getElementById('folderName');
+        var selectedFolderIdInput = document.getElementById('selectedFolderId');
+        var selectedFolderNameInput = document.getElementById('selectedFolderName');
+
+        if (folderSelection.value) {
+            // If folder is selected from dropdown
+            selectedFolderIdInput.value = folderSelection.value;
+            selectedFolderNameInput.value = folderSelection.options[folderSelection.selectedIndex].text;
+        } else if (folderNameInput.value) {
+            // If folder name is entered manually
+            selectedFolderNameInput.value = folderNameInput.value;
+        } else {
+            // Prevent form submission if no folder is selected or entered
+            event.preventDefault();
+            alert('Please select or enter a folder.');
+        }
+    });
     // Function to create a counter that initially returns 1 and increments by 1 each time it's called
     function counter() {
         let count = 1; // Initialize count variable
