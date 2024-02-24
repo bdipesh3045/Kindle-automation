@@ -1,1 +1,3 @@
 *.env
+*new.py
+*convert.py

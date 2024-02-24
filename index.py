@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from dotenv import load_dotenv
 import os
+import time
 
 app = Flask(__name__)
 engine = create_engine("sqlite:///data.db")
@@ -38,35 +39,54 @@ PASSWORD = os.getenv("PASSWORD")
 
 
 def add_book(filename, datas):
-    # Define the name of the new folder
-    NEW_FOLDER_NAME = filename
-
+    i = 0
     instapaper = Instapaper(CONSUMER_KEY, CONSUMER_SECRET)
 
     # Authenticate with Instapaper
     instapaper.login(USERNAME, PASSWORD)
 
-    # Create a new folder
-    try:
-        instapaper.create_folder(NEW_FOLDER_NAME)
-    except Exception as e:
-        print("Failed to create the folder:", e)
-    folders = instapaper.folders()
-    for folder in folders:
-        if folder["title"] == NEW_FOLDER_NAME:
-            target_folder_id = folder["folder_id"]
-            break
+    def new_file(no):
+        # Define the name of the new folder
+        if no == 0:
+            NEW_FOLDER_NAME = filename
+        else:
+            NEW_FOLDER_NAME = f"{filename}{no}"
+
+        # Create a new folder
+        try:
+            instapaper.create_folder(NEW_FOLDER_NAME)
+        except Exception as e:
+            print("Failed to create the folder:", e)
+
+        folders = instapaper.folders()
+        target_folder_id = None  # Initialize target_folder_id
+
+        for folder in folders:
+            if folder["title"] == NEW_FOLDER_NAME:
+                target_folder_id = folder["folder_id"]
+                break
+
+        if target_folder_id is None:
+            print("Failed to find the target folder")
+            return False
+        return (target_folder_id, NEW_FOLDER_NAME)
 
     for data in datas:
+        if i == 0 or i % 20 == 0:
+            target_folder_id, NEW_FOLDER_NAME = new_file(i // 20)
+            print(f"Folder created: {NEW_FOLDER_NAME}")
         bookmark_params = {
             "title": data[0],
             "url": data[1],
         }
-
+        print(f"Book added {data[0]}")
+        time.sleep(5)
         new_bookmark = Bookmark(instapaper, bookmark_params)
-
+        i += 1
         # Save the bookmark
         new_bookmark.save(target_folder_id)
+        print(f"Book count: {i}")
+
     return True
 
 
